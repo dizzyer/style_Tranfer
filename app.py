@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, send_from_directory, render_template_string
+from flask import Flask, request, jsonify, send_from_directory, render_template_string, render_template
 import os
 import uuid
 import numpy as np
@@ -17,17 +17,26 @@ def allowed_file(filename):
 
 @app.route('/')
 def index():
-    return render_template_string('''<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image and Text Upload</title>
-    <meta http-equiv="refresh" content="0;url=/static/index.html">
-</head>
-<body>
-</body>
-</html>''')
+    return render_template('index.html')
+
+@app.route('/login', methods=['POST'])
+def login():
+    name = request.form.get('name')
+    pwd = request.form.get('pwd')
+    if name=="123" and pwd=="123":
+        return render_template('./transfer.html')
+    else:
+        return render_template('index.html')
+@app.route('/register', methods=['POST'])
+def register():
+    name = str(request.form.get('username'))
+    pwd = str(request.form.get('password'))
+    print(name+" "+pwd)
+    return render_template('./index.html')
+
+@app.route('/goto_transfer')
+def goto_transfer():
+    return render_template('transfer.html')
 
 @app.route('/upload', methods=['POST'])
 def upload_files():
@@ -64,10 +73,4 @@ def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 if __name__ == '__main__':
-    # Copy index.html to static folder for serving directly
-    with open('index.html', 'r', encoding='utf-8') as f:
-        html_content = f.read()
-    with open(os.path.join(app.static_folder, 'index.html'), 'w') as f:
-        f.write(html_content)
-
     app.run(debug=True)

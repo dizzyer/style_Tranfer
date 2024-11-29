@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo_0x01</title>
+    <link type="text/css" href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+</head>
+<body>
+
+    <div class="container">
+       <form class="login-box" id="loginForm" action="/login" method="post">
+            <div class="apple-btn login-apple">
+                <li class="red-btn"></li>
+                <li class="yellow-btn"></li>
+                <li class="green-btn"></li>
+            </div>
+            <div class="title">Login</div>
+            <div class="input">
+                <input type="text" name="name" id="login-user" placeholder="Input your username">
+            </div>
+            <div class="input">
+                <input type="password" name="pwd" id="login-password" placeholder="Input your password">
+            </div>
+            <div class="btn login-btn">
+                <span id="login_submit">登录</span>
+            </div>
+            <div class="change-box login-change">
+                <div class="change-btn toSign">
+                    <span>去注册</span>
+                </div>
+            </div>
+       </form>
+
+       <form class="sign-box" id="registerForm" action="/register" method="post">
+            <div class="apple-btn sign-apple">
+                <li class="red-btn"></li>
+                <li class="yellow-btn"></li>
+                <li class="green-btn"></li>
+            </div>
+            <div class="title">Sign</div>
+            <div class="input">
+                <input type="text" id="sign-user" name="username" placeholder="Have A Good Name?">
+            </div>
+            <div class="input">
+                <input type="password" id="sign-password" name="pwd" placeholder="Keep Secret">
+            </div>
+            <div class="btn sign-btn">
+                <span id="register_submit">注册</span>
+            </div>
+            <div class="change-box sign-change">
+                <div class="change-btn toLogin">
+                    <span>去登陆</span>
+                </div>
+            </div>
+       </form>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script>
+        document.getElementById('login_submit').addEventListener('click', function() {
+            document.getElementById('loginForm').submit();
+        });
+        document.getElementById('register_submit').addEventListener('click', function() {
+            document.getElementById('registerForm').submit();
+        });
+    </script>
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="../static/script.js"></script>
+</body>
+</html>
