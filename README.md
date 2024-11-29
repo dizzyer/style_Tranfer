@@ -1,2 +1,2 @@
-# style_transfer
-null
+# style_tran
+前端接收两张图片和一段文字并即时预览两张图片，后端收到后将第一张再返回给前端
