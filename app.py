@@ -1,8 +1,9 @@
-from flask import Flask, request, jsonify, send_from_directory, render_template_string, render_template
+from flask import Flask, request, jsonify, send_from_directory, render_template_string, render_template,redirect,make_response,url_for
 import os
 import uuid
 import numpy as np
 from PIL import Image
+from databse import UserRegistrationSystem
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads/'
@@ -19,23 +20,40 @@ def allowed_file(filename):
 def index():
     return render_template('index.html')
 
-@app.route('/login', methods=['POST'])
+@app.route('/login', methods=['GET','POST'])
 def login():
-    name = request.form.get('name')
-    pwd = request.form.get('pwd')
-    if name=="123" and pwd=="123":
-        return render_template('./transfer.html')
+    name = str(request.form.get('name'))
+    pwd = str(request.form.get('pwd'))
+    db = UserRegistrationSystem("users.db")
+    code,msg=db.verify_login(name,pwd)
+    if code == True:
+        return redirect(url_for('goto_transfer', username=f'{name}'))
     else:
-        return render_template('index.html')
-@app.route('/register', methods=['POST'])
+        response = make_response(f'<script>alert("{msg}");</script>')
+        return response
+
+
+#注册
+@app.route('/register', methods=['POST',"GET"])
 def register():
-    name = str(request.form.get('username'))
-    pwd = str(request.form.get('password'))
-    print(name+" "+pwd)
-    return render_template('./index.html')
+    name = str(request.form.get('username'))#username
+    pwd = str(request.form.get('pwd'))#pwd
+    db = UserRegistrationSystem("users.db")
+    if name=="55b0a265-2b6d-8c2c-3494-2d0b85cabd38" and pwd=="55b0a265-2b6d-8c2c-3494-2d0b85cabd38":#测试用，重置已注册用户数据库
+        db.clear()
+        return
+    code,msg=db.register(name,pwd)
+    #注册成功
+    if code == True:
+        return redirect(url_for('/'))
+    else:
+        response = make_response(f'<script>alert("{msg}");</script>')
+        return response
 
 @app.route('/goto_transfer')
 def goto_transfer():
+    name = request.args.get('name')
+    print(f"{name}")
     return render_template('transfer.html')
 
 @app.route('/upload', methods=['POST'])
