@@ -45,7 +45,8 @@ def register():
     code,msg=db.register(name,pwd)
     #注册成功
     if code == True:
-        return redirect(url_for('/'))
+        response = make_response(f'<script>alert("{msg}");</script>')
+        return response
     else:
         response = make_response(f'<script>alert("{msg}");</script>')
         return response
